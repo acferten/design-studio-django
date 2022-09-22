@@ -5,8 +5,18 @@ import re
 
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=True)
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    first_name = forms.CharField(max_length=30, label='ФИО', required=True,
+                                 help_text='Укажите свое ФИО. Только кирилица, дефис и пробелы.')
+    email = forms.EmailField(label='Электронная почта', max_length=254, help_text='Укажите валидную электронную почту',
+                             required=True)
+    agreement = forms.BooleanField(label='Регистрируясь, вы даете согласие на обработку персональных данных.',
+                                   required=True)
+    username = forms.CharField(label='Логин', help_text='Должен быть уникальным. Только латиница и дефис',
+                               required=True)
+    password1 = forms.CharField(label='Введите пароль', required=True,
+                                widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Подтвердите пароль', required=True,
+                                widget=forms.PasswordInput)
 
     class Meta:
         model = User
