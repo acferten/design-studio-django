@@ -12,5 +12,6 @@ urlpatterns = [
     path('home/', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
     path('myorders/create/', views.ordercreate, name='order-create'),
+    path('myorders/', views.OrdersByUserListView.as_view(), name='myorders'),
 ]
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,18 @@
+
+
+{% block title %} Orders List {% endblock %}
+
+
+
+<form method="GET">
+    {{ filter.form }}
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<ul>
+    {% for order in filter.qs %}
+    <li>
+        <a href="#">{{ order.name }}</a>
+    </li>
+    {% endfor %}
+</ul>

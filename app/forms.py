@@ -43,11 +43,10 @@ class SignUpForm(UserCreationForm):
         return data
 
 
-class NewOrderForm(forms.Form):
-    name = forms.CharField(max_length=20, required=True, label='Название заявки')
-    description = forms.CharField(max_length=1000, label="Описание заявки", required=True)
-    category = forms.ChoiceField(
-        choices=Category.objects.all(),
-        widget=forms.Select, label="Выберите категорию заявки"
-    )
-    plan = forms.ImageField(widget=forms.FileInput, label="Загрузите план вашей квартиры")
+class NewOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['name', 'description', 'category', 'plan']
+        category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None,
+                                          to_field_name="category_name")
+        plan = forms.ImageField(widget=forms.FileInput, label="Загрузите план вашей квартиры")

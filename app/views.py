@@ -3,9 +3,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import request
 from django.shortcuts import render, redirect
 from django.views import generic
-from django.views.generic import CreateView
 
-from .models import Order
+from .filters import OrderFilter
+
+from .models import Order, Category
 from .forms import SignUpForm, NewOrderForm
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -43,13 +44,25 @@ def index(request):
 @login_required
 def ordercreate(request):
     if request.method == 'POST':
-        form = NewOrderForm(request.POST)
+        form = NewOrderForm(request.POST, request.FILES)
         if form.is_valid():
+            # form.save()
             stock = form.save(commit=False)
-            stock.user = request.user
+            stock.orderer = request.user
             stock.status = 'н'
             stock.save()
             return redirect('myorders')
     else:
         form = NewOrderForm()
     return render(request, 'order_form.html', {'form': form})
+
+
+class OrdersByUserListView(LoginRequiredMixin, generic.ListView):
+    model = Order
+    template_name = 'user_orders.html'
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs,)
+        context['filter'] = OrderFilter(self.request.GET, queryset=self.get_queryset())
+        return context
