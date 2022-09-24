@@ -1,7 +1,10 @@
 from django import forms
+from .models import Category
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import re
+from django.forms import ModelForm
+from .models import Order
 
 
 class SignUpForm(UserCreationForm):
@@ -38,3 +41,13 @@ class SignUpForm(UserCreationForm):
                 raise forms.ValidationError('Логин может содержать только латиницу и дефис')
                 break
         return data
+
+
+class NewOrderForm(forms.Form):
+    name = forms.CharField(max_length=20, required=True, label='Название заявки')
+    description = forms.CharField(max_length=1000, label="Описание заявки", required=True)
+    category = forms.ChoiceField(
+        choices=Category.objects.all(),
+        widget=forms.Select, label="Выберите категорию заявки"
+    )
+    plan = forms.ImageField(widget=forms.FileInput, label="Загрузите план вашей квартиры")
