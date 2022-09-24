@@ -14,7 +14,7 @@ class Order(models.Model):
     name = models.CharField(max_length=20, help_text="Название заявки", blank=False)
     description = models.TextField(max_length=1000, help_text="Описание заявки", blank=False)
 
-    category = models.ForeignKey(Category, help_text="Выберите категорию заявки", on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category, help_text='Категория заявки')
 
     plan = models.ImageField(upload_to='app/files/plans', blank=False)
 
