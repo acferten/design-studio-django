@@ -1,18 +1,14 @@
-
-
-{% block title %} Orders List {% endblock %}
-
-
+{% block title %} Список заявок {% endblock %}
 
 <form method="GET">
     {{ filter.form }}
-    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="submit" class="btn btn-primary">ОК</button>
 </form>
 
 <ul>
     {% for order in filter.qs %}
-    <li>
-        <a href="#">{{ order.name }}</a>
-    </li>
+        <li>
+            <a href="{% url 'order-detail' order.pk %}">{{ order.name }}</a>
+        </li>
     {% endfor %}
 </ul>
