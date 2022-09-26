@@ -2,6 +2,7 @@
     <h1>Home</h1>
     {% if user.is_authenticated %}
         <p>User: {{ user.get_username }}</p>
+        <p><a href="{% url 'profile' %}">your profile</a></p>
         <p><a href="{% url 'logout' %}?next={{ request.path }}">log out</a></p>
     {% else %}
         <p><a href="{% url 'login' %}?next={{ request.path }}">log in</a></p>

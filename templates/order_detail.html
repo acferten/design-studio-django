@@ -1,0 +1,11 @@
+{% block content %}
+    <h1>Название заявки: {{ order.name }}</h1>
+
+    <p><strong>Заказчик:</strong> {{ order.orderer }}</p>
+    <p><strong>Описание:</strong> {{ order.description }}</p>
+    <p><strong>Статус:</strong> {{ order.status }}</p>
+    <img src="{{ order.plan.url }}">
+    <p><strong>Категория:</strong> {{ order.category }}</p>
+    <br>
+    <a href="{{order.pk}}/delete">Удалить заявку?</a>
+{% endblock %}

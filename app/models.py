@@ -4,7 +4,7 @@ from django.urls import reverse
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=200, help_text="Введите категорию заявки")
+    name = models.CharField(max_length=200, help_text="Введите категорию заявки", unique=True)
 
     def __str__(self):
         return self.name
@@ -14,8 +14,7 @@ class Order(models.Model):
     name = models.CharField(max_length=20, help_text="Название заявки", blank=False)
     description = models.TextField(max_length=1000, help_text="Описание заявки", blank=False)
 
-    category = models.ManyToManyField(Category, help_text='Категория заявки')
-
+    category = models.ForeignKey(Category, to_field='name', help_text='Категория заявки', blank=False, on_delete=models.CASCADE)
     plan = models.ImageField(upload_to='app/files/plans', blank=False)
 
     LOAN_STATUS = (

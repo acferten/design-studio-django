@@ -44,9 +44,8 @@ class SignUpForm(UserCreationForm):
 
 
 class NewOrderForm(forms.ModelForm):
+
     class Meta:
         model = Order
         fields = ['name', 'description', 'category', 'plan']
-        category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None,
-                                          to_field_name="category_name")
         plan = forms.ImageField(widget=forms.FileInput, label="Загрузите план вашей квартиры")
