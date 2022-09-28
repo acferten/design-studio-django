@@ -1,0 +1,12 @@
+{% block content %}
+    <h1>Обновление статуса для заявки "{{ order.name }}"</h1>
+    <p>Заказчик: {{ order.orderer }}</p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Подтвердить">
+    </form>
+{% endblock %}

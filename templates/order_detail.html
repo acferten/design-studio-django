@@ -7,6 +7,11 @@
     <img src="{{ order.plan.url }}">
     <p><strong>Категория:</strong> {{ order.category }}</p>
     <p><strong>Дата создания::</strong> {{ order.date }}</p>
+{#    <img src="{{ order.design.url }}">#}
     <br>
-    <a href="{{order.pk}}/delete">Удалить заявку?</a>
+    <a href="{{ order.pk }}/delete">Удалить заявку?</a>
+
+    {% if perms.app.can_change_status %}
+        <a href="{{ order.pk }}/status-change">Обновить статус</a>
+    {% endif %}
 {% endblock %}

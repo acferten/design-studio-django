@@ -11,7 +11,7 @@ class Category(models.Model):
 
     class Meta:
         permissions = (
-        ('can_delete_category', 'Может удалять категории'), ('can_create_category', 'Может добавлять категории'),)
+            ('can_delete_category', 'Может удалять категории'), ('can_create_category', 'Может добавлять категории'),)
 
 
 class Order(models.Model):

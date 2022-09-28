@@ -1,18 +1,24 @@
 {% block content %}
-<h1>Все заявки</h1>
+    <h1>Все заявки</h1>
 
-{% if order_list %}
-<ul>
 
-    {% for order in order_list %}
-    <li>
-        <a href="{% url 'order-detail' order.pk %}">{{order.name}}</a> ({{ order.get_status_display }}) -
-        {{order.orderer}} - <a href="#">Обновить статус</a>
-    </li>
-    {% endfor %}
-</ul>
+    <form method="GET">
+        {{ filter.form }}
+        <button type="submit" class="btn btn-primary">ОК</button>
+    </form>
+    <a href="{% url 'delete-category' %}">Удалить категорию</a>
+    {% if order_list %}
+        <ul>
 
-{% else %}
-<p>Заявок пока что нет</p>
-{% endif %}
+            {% for order in filter.qs %}
+                <li>
+                    <a href="{% url 'order-detail' order.pk %}">{{ order.name }}</a> ({{ order.get_status_display }}) -
+                    {{ order.orderer }}
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>Заявок пока что нет</p>
+    {% endif %}
 {% endblock %}

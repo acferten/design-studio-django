@@ -7,23 +7,50 @@ from django.forms import ModelForm
 from .models import Order
 
 
+# class CompleteStatusUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = Order
+#         fields = ['design']
+#         status = forms.ChoiceField(initial='в', disabled=True)
+
+class StatusUpdateForm(forms.ModelForm):
+    """
+    Обновление статуса
+    """
+
+    class Meta:
+        model = Order
+        fields = ['status']
+
+
+class DeleteCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['category']
+
+
 class SignUpForm(UserCreationForm):
+    """
+    Форма регистрации
+    """
     first_name = forms.CharField(max_length=30, label='ФИО', required=True,
                                  help_text='Укажите свое ФИО. Только кирилица, дефис и пробелы.')
     email = forms.EmailField(label='Электронная почта', max_length=254, help_text='Укажите валидную электронную почту',
                              required=True)
     agreement = forms.BooleanField(label='Регистрируясь, вы даете согласие на обработку персональных данных.',
                                    required=True)
-    username = forms.CharField(label='Логин', help_text='Должен быть уникальным. Только латиница и дефис',
-                               required=True)
-    password1 = forms.CharField(label='Введите пароль', required=True,
-                                widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Подтвердите пароль', required=True,
-                                widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'email', 'password1', 'password2')
+        labels = {
+            'username': 'Логин',
+            'password1': 'Введите пароль',
+            'password2': 'Подтвердите пароль',
+        }
+        help_texts = {
+            'username': 'Должен быть уникальным. Только латиница и дефис',
+        }
 
     def clean_first_name(self):
         data = self.cleaned_data['first_name']
@@ -44,6 +71,9 @@ class SignUpForm(UserCreationForm):
 
 
 class NewOrderForm(forms.ModelForm):
+    """
+    Форма новой заявки
+    """
 
     class Meta:
         model = Order
