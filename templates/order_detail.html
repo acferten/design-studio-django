@@ -3,9 +3,10 @@
 
     <p><strong>Заказчик:</strong> {{ order.orderer }}</p>
     <p><strong>Описание:</strong> {{ order.description }}</p>
-    <p><strong>Статус:</strong> {{ order.status }}</p>
+    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
     <img src="{{ order.plan.url }}">
     <p><strong>Категория:</strong> {{ order.category }}</p>
+    <p><strong>Дата создания::</strong> {{ order.date }}</p>
     <br>
     <a href="{{order.pk}}/delete">Удалить заявку?</a>
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import request, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -36,8 +36,9 @@ def signup(request):
 
 
 def index(request):
+    num_accepted = Order.objects.filter(status__exact='п').count()
     context = {
-
+        'num_accepted': num_accepted
     }
     return render(request, 'index.html', context=context)
 
@@ -93,6 +94,17 @@ class OrderDeleteView(generic.DeleteView):
                 "You don't own this object"
             )
         return obj
+
+
+class AllOrdersListView(PermissionRequiredMixin, generic.ListView):
+    permission_required = 'app.can_change_status'
+    model = Order
+    template_name = 'all_orders.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Order.objects.order_by('date')
+
 
 # class DeleteCar(DeleteView):
 #     model = Car

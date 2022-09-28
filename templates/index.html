@@ -1,11 +1,18 @@
 {% block content %}
-    <h1>Home</h1>
-    {% if user.is_authenticated %}
-        <p>User: {{ user.get_username }}</p>
-        <p><a href="{% url 'profile' %}">your profile</a></p>
+<h1>Home</h1>
+{% if user.is_authenticated %}
+    {% if perms.app.can_change_status %}
+        <a href="{% url 'all-orders' %}">Все заявки</a>
         <p><a href="{% url 'logout' %}?next={{ request.path }}">log out</a></p>
-    {% else %}
-        <p><a href="{% url 'login' %}?next={{ request.path }}">log in</a></p>
-        <a href='{% url 'signup' %}'>sign up</a>
-    {% endif %}
+
+{% else %}
+    <p>User: {{ user.get_username }}</p>
+    <p><a href="{% url 'profile' %}">your profile</a></p>
+    <p><a href="{% url 'logout' %}?next={{ request.path }}">log out</a></p>
+{% endif %}
+{% else %}
+<p><a href="{% url 'login' %}?next={{ request.path }}">log in</a></p>
+<a href='{% url 'signup' %}'>sign up</a>
+{% endif %}
+    <p>Количество заявок, находящихся в статусе «Принято в работу»: {{ num_accepted }}</p>
 {% endblock %}

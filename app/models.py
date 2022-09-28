@@ -9,12 +9,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        permissions = (
+        ('can_delete_category', 'Может удалять категории'), ('can_create_category', 'Может добавлять категории'),)
+
 
 class Order(models.Model):
     name = models.CharField(max_length=20, help_text="Название заявки", blank=False)
     description = models.TextField(max_length=1000, help_text="Описание заявки", blank=False)
 
-    category = models.ForeignKey(Category, to_field='name', help_text='Категория заявки', blank=False, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, to_field='name', help_text='Категория заявки', blank=False,
+                                 on_delete=models.CASCADE)
     plan = models.ImageField(upload_to='app/files/plans', blank=False)
 
     LOAN_STATUS = (
@@ -28,6 +33,7 @@ class Order(models.Model):
 
     class Meta:
         ordering = ["date"]
+        permissions = (('can_change_status', 'Менять статус заявки'),)
 
     def __str__(self):
         return self.name
@@ -40,5 +46,3 @@ class Order(models.Model):
 
     design = models.ImageField(upload_to='app/files/designs', blank=True)
     orderer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False)
-
-

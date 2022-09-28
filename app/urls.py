@@ -16,4 +16,5 @@ urlpatterns = [
                   path('order/<int:pk>', views.OrderDetailView.as_view(), name='order-detail'),
                   path('order/<int:pk>/delete', views.OrderDeleteView.as_view(), name='order-delete'),
                   path('accounts/', include('django.contrib.auth.urls')),
+                  path('orders/', views.AllOrdersListView.as_view(), name='all-orders'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
