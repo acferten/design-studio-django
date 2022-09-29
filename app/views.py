@@ -1,22 +1,17 @@
+from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import request, Http404, HttpResponseRedirect
+from django.http import request, Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, CreateView
 
 from .filters import OrderFilter, AllOrderFilter
 
 from .models import Order, Category
 from .forms import SignUpForm, NewOrderForm, StatusUpdateForm, DeleteCategoryForm
 from django.contrib.auth.decorators import login_required, permission_required
-
-
-@login_required
-def profile(request):
-    context = {}
-    return render(request, 'profile.html', context=context)
 
 
 def signup(request):
@@ -37,15 +32,30 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
-def index(request):
-    """
-    Главная страница
-    """
-    num_accepted = Order.objects.filter(status__exact='п').count()
-    context = {
-        'num_accepted': num_accepted
-    }
-    return render(request, 'index.html', context=context)
+class Index(generic.ListView):
+    model = Order
+    template_name = 'index.html'
+
+    def get_queryset(self):
+        return Order.objects.filter(status='в').order_by('date')[:3]
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'num_accepted': Order.objects.filter(status='п').count(),
+            'order_list': Order.objects.filter(status='в').order_by('date')[:3]
+        }
+        return context
+
+
+# def index(request):
+#     """
+#     Главная страница
+#     """
+#     num_accepted = Order.objects.filter(status__exact='п').count()
+#     context = {
+#         'num_accepted': num_accepted
+#     }
+#     return render(request, 'index.html', context=context)
 
 
 @login_required
@@ -85,7 +95,7 @@ class OrdersByUserListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class OrderDetailView(generic.DetailView):
+class OrderDetailView(LoginRequiredMixin, generic.DetailView):
     """
     Детальная страница для каждого заказа
     """
@@ -93,7 +103,7 @@ class OrderDetailView(generic.DetailView):
     template_name = 'order_detail.html'
 
 
-class OrderDeleteView(generic.DeleteView):
+class OrderDeleteView(LoginRequiredMixin, generic.DeleteView):
     """
     Удаление заказа
     """
@@ -107,6 +117,8 @@ class OrderDeleteView(generic.DeleteView):
             raise Http404(
                 "Вы не автор статьи"
             )
+        if obj.status != 'н':
+            raise Http404("Вы можете удалять только заявки со статусом 'Новая'")
         return obj
 
 
@@ -128,35 +140,62 @@ class AllOrdersListView(PermissionRequiredMixin, generic.ListView):
         return context
 
 
-
 @login_required
 @permission_required('app.can_change_status')
 def statuschange(request, pk):
     model = Order
     order = get_object_or_404(Order, pk=pk)
+    old_status = order.status
     if request.method == 'POST':
         form = StatusUpdateForm(request.POST)
         if form.is_valid():
             order.status = form.cleaned_data['status']
-            if form.cleaned_data['status'] == 'в':
-                # form = CompleteStatusUpdateForm()
+            if order.status == 'в':
                 return redirect('complete-order', pk)
+            elif old_status == 'в' or old_status == 'п':
+                return HttpResponse('<h1>Смена статуса с «Принято в работу» или «Выполнено» невозможна</h1>')
+            elif order.status == 'п':
+                return redirect('accepted-order', pk)
             else:
                 order.save()
             return HttpResponseRedirect(reverse('all-orders'))
     else:
         form = StatusUpdateForm()
-    return render(request, 'status_form.html', {'form': form})
+    return render(request, 'status_form.html', {'form': form, 'order': order})
 
 
-class CompleteStatusChange(UpdateView):
+class CompleteStatusChange(PermissionRequiredMixin, UpdateView):
+    permission_required = 'app.can_change_status'
     model = Order
     fields = ['status', 'design']
     initial = {'status': 'в'}
     success_url = '/'
     template_name = 'status_form.html'
 
+    def get_form(self, form_class=None):
+        form = super(CompleteStatusChange, self).get_form(form_class)
+        form.fields['design'].required = True
+        form.fields['status'].disabled = True
+        return form
 
+
+class AcceptedStatusChange(PermissionRequiredMixin, UpdateView):
+    permission_required = 'app.can_change_status'
+    model = Order
+    fields = ['status', 'comment']
+    initial = {'status': 'п'}
+    success_url = '/'
+    template_name = 'status_form.html'
+
+    def get_form(self, form_class=None):
+        form = super(AcceptedStatusChange, self).get_form(form_class)
+        form.fields['comment'].required = True
+        form.fields['status'].disabled = True
+        return form
+
+
+@login_required
+@permission_required('app.can_change_status')
 def deletecategory(request):
     if request.method == 'POST':
         form = DeleteCategoryForm(request.POST)
@@ -166,18 +205,12 @@ def deletecategory(request):
             return HttpResponseRedirect(reverse('all-orders'))
     else:
         form = DeleteCategoryForm()
-    return render(request, 'category_form.html', {'form': form})
+    return render(request, 'category_delete.html', {'form': form})
 
 
-# def completestatuschange(request, pk):
-#     order = get_object_or_404(Order, pk=pk)
-#     if request.method == 'POST':
-#         form = CompleteStatusUpdateForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             stock = form.save(commit=False)
-#             stock.status = 'в'
-#             stock.save()
-#             return redirect('orders')
-#     else:
-#         form = CompleteStatusUpdateForm()
-#     return render(request, 'status_form.html', {'form': form})
+class CategoryAdd(PermissionRequiredMixin, CreateView):
+    permission_required = 'app.can_change_status'
+    model = Category
+    fields = ['name']
+    template_name = 'category_delete.html'
+    success_url = '/'

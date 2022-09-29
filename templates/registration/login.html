@@ -1,5 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block title %} <title>Вход</title> {% endblock %}
 {% block content %}
 
+        <div class="content-md container">
+        <div class="row margin-b-20">
+            <div class="col-sm-6">
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
@@ -19,20 +25,22 @@
 
             <tr>
                 <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
+                <td class="form-control">{{ form.username }}</td>
             </tr>
 
             <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
+                <td >{{ form.password.label_tag }}</td>
+                <td class="form-control">{{ form.password }}</td>
             </tr>
         </table>
 
-        <input type="submit" value="login"/>
+        <input type="submit" class="btn-theme btn-theme-sm btn-base-bg text-uppercase" style="margin-top: 20px; width: 205px" value="login"/>
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
 
     {# Assumes you setup the password_reset view in your URLconf <p><a href="{% url 'password_reset' %}">Lost password?</a></p>#}
 
-
+            </div>
+        </div>
+        </div>
 {% endblock %}

@@ -1,14 +1,45 @@
-{% block title %} Список заявок {% endblock %}
+{% extends "base_generic.html" %}
 
-<form method="GET">
-    {{ filter.form }}
-    <button type="submit" class="btn btn-primary">ОК</button>
-</form>
+{% block title %} <title>Список заявок</title> {% endblock %}
 
-<ul>
-    {% for order in filter.qs %}
-        <li>
-            <a href="{% url 'order-detail' order.pk %}">{{ order.name }}</a>
-        </li>
-    {% endfor %}
-</ul>
+
+{% block content %}
+
+    <div class="section-seperator">
+        <div class="content-md container">
+            <div class="row margin-b-40">
+                <div class="col-sm-6">
+                    <h2>Список ваших заявок</h2>
+                    <p>Выберите значение из выпадающего списка и нажмите кнопку "OK" для применения фильтров. <br>Для
+                        удаления заявки выберите ее в списке и в конце страницы нажмите "Удалить заявку"</p>
+                </div>
+            </div>
+            <!--// end row -->
+
+            <div class="row">
+
+                <div class="margin-b-10" style="display: inline-block">
+                    <form method="GET">
+                        <select style="display: inline-block" class="form-control" name="status"
+                                value={{ filter.form.status }}
+                                        </select>
+                            <button style="display: inline-block" type="submit" class="btn btn-primary">ОК</button>
+                    </form>
+                </div>
+            </div>
+            {% for order in filter.qs %}
+                <div class="col-sm-4 sm-margin-b-50" style="margin-top: 60px">
+                    <div class="wow fadeInLeft" data-wow-duration=".3" data-wow-delay=".3s">
+                        <h3>{{ order.name }}</h3>
+                        <p>{{ order.description }}</p>
+                        <p>{{ order.category }}</p>
+                        <p>{{ order.date }}</p>
+                        <p> {{ order.get_status_display }}</p>
+                        <a class="link" href="{% url 'order-detail' order.pk %}">Смотреть всю заявку</a>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

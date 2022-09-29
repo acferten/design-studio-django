@@ -5,10 +5,10 @@ from .models import Order
 class OrderFilter(django_filters.FilterSet):
     class Meta:
         model = Order
-        exclude = ('name', 'description', 'plan', 'design', 'orderer', 'category', 'date')
+        exclude = ('name', 'description', 'plan', 'design', 'orderer', 'category', 'date', 'comment')
 
 
 class AllOrderFilter(django_filters.FilterSet):
     class Meta:
         model = Order
-        exclude = ('name', 'description', 'plan', 'design', 'orderer', 'status', 'date')
+        exclude = ('name', 'description', 'plan', 'design', 'orderer', 'status', 'date', 'comment')

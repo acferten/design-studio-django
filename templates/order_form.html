@@ -1,11 +1,52 @@
+{% extends "base_generic.html" %}
+
 {% block content %}
 
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Submit"/>
+    <div class="section-seperator">
+        <div class="content-md container">
+            <div class="row margin-b-40">
+                <div class="col-sm-6">
+                    <h2>Новая заявка</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed tempor incididunt ut laboret dolore
+                        magna aliqua enim minim veniam exercitation</p>
+                </div>
+            </div>
+            <!--// end row -->
 
-    </form>
+            <div class="row">
+                <div class="col-md-5 col-sm-7">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="margin-b-10">
+                            <input type="text" class="form-control" name="name" placeholder="Название"
+                                   value="{{ name }}">
+                            {{ form.errors.name }}
+                        </div>
+                        <div class="margin-b-10">
+                            <label><p>Выберите категорию:</p></label>
+                            <select class="form-control" name="category" value={{ form.category }}
+                                    {#                                {{ form.category }}#}
+                                    </select>
+                                {{ form.errors.category }}
+                        </div>
+                        <div class="margin-b-20">
+                            <textarea class="form-control" rows="5" placeholder="Описание" name="description"
+                                      value="{{ description }}"></textarea>
+                            {{ form.errors.description }}
+                        </div>
+                        <div class="margin-b-20">
+                            <input class="form-control" type="file"
+                                   name="plan"
+                                   accept="image/png, image/jpeg">
+                            {{ form.errors.plan }}
+                        </div>
+                        <button type="submit" value="Submit" class="btn-theme btn-theme-sm btn-base-bg text-uppercase">
+                            Создать
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!--// end row -->
+        </div>
+    </div>
 {% endblock %}

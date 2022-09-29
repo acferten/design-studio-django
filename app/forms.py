@@ -3,15 +3,16 @@ from .models import Category
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import re
-from django.forms import ModelForm
 from .models import Order
 
 
+#
 # class CompleteStatusUpdateForm(forms.ModelForm):
 #     class Meta:
 #         model = Order
-#         fields = ['design']
-#         status = forms.ChoiceField(initial='в', disabled=True)
+#         fields = ['design', 'status']
+#         widgets = {'status': forms.Select(attrs={'readonly': True})}
+
 
 class StatusUpdateForm(forms.ModelForm):
     """
@@ -23,10 +24,8 @@ class StatusUpdateForm(forms.ModelForm):
         fields = ['status']
 
 
-class DeleteCategoryForm(forms.ModelForm):
-    class Meta:
-        model = Order
-        fields = ['category']
+class DeleteCategoryForm(forms.Form):
+    name = forms.ModelChoiceField(queryset=Category.objects.all(), required=True)
 
 
 class SignUpForm(UserCreationForm):
@@ -79,3 +78,12 @@ class NewOrderForm(forms.ModelForm):
         model = Order
         fields = ['name', 'description', 'category', 'plan']
         plan = forms.ImageField(widget=forms.FileInput, label="Загрузите план вашей квартиры")
+
+    def clean_plan(self):
+        image = self.cleaned_data.get('plan', False)
+        if image:
+            if image.size > 2 * 1024 * 1024:
+                raise forms.ValidationError("Максимальный размер изображения 2Мб")
+            return image
+        else:
+            raise forms.ValidationError("Couldn't read uploaded image")

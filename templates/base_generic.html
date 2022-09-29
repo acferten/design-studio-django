@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru" class="no-js">
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    {% block title %}<title>Студия Design.pro</title> {% endblock %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    {% load static %}
+    <!-- GLOBAL MANDATORY STYLES -->
+    <link href="http://fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet" type="text/css">
+    <link href="{% static 'vendor/simple-line-icons/simple-line-icons.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+
+    <!-- PAGE LEVEL PLUGIN STYLES -->
+    <link href="{% static 'vendor/swiper/css/swiper.min.css' %}" rel="stylesheet" type="text/css"/>
+
+    <!-- THEME STYLES -->
+    <link href="{% static 'css/layout.min.css' %}" rel="stylesheet" type="text/css"/>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico"/>
+</head>
+<!-- END HEAD -->
+
+<!-- BODY -->
+<body>
+
+<!--========== HEADER ==========-->
+{% block sidebar %}
+    <header class="header">
+        <!-- Navbar -->
+        <nav class="navbar" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="menu-container">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="toggle-icon"></span>
+                    </button>
+
+                    <!-- Logo -->
+                    <div class="navbar-logo">
+                        <a class="navbar-logo-wrap" href="{% url 'index' %}">
+                            <img class="navbar-logo-img" src="{% static 'img/logo.png' %}" alt="Acidus Logo">
+                        </a>
+                    </div>
+                    <!-- End Logo -->
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse nav-collapse">
+                    <div class="menu-container">
+                        <ul class="navbar-nav navbar-nav-right">
+                            <!-- Home -->
+                        {% if perms.app.can_change_status %}
+                                                   <li class="nav-item">
+                                <a class="nav-item-child active" href="{% url 'all-orders' %}">
+                                    Все заявки
+                                </a>
+                            </li>
+                            <!-- End Home -->
+
+                            <!-- About -->
+                            <li class="nav-item">
+                                <a class="nav-item-child" href="{% url 'logout' %}">
+                                    Выйти
+                                </a>
+                            </li>
+                            <!-- End About -->
+                            {% elif user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-item-child active" href="{% url 'myorders' %}">
+                                    Мои заявки
+                                </a>
+                            </li>
+                            <!-- End Home -->
+
+                            <!-- About -->
+                            <li class="nav-item">
+                                <a class="nav-item-child" href="{% url 'order-create' %}">
+                                    Создать заявку
+                                </a>
+                            </li>
+                            <!-- End About -->
+
+                            <!-- Work -->
+                            <li class="nav-item">
+                                <a class="nav-item-child" href="{% url 'logout' %}">
+                                    Выйти
+                                </a>
+                            </li>
+                            <!-- End Work -->
+                            {% else %}
+                                <li class="nav-item">
+                                <a class="nav-item-child" href="{% url 'login' %}">
+                                    Войти
+                                </a>
+                            </li>
+                            <!-- End About -->
+
+                            <!-- Work -->
+                            <li class="nav-item">
+                                <a class="nav-item-child" href="{% url 'signup' %}">
+                                    Зарегистрироваться
+                                </a>
+                            </li>
+
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- End Navbar Collapse -->
+            </div>
+        </nav>
+        <!-- Navbar -->
+
+    </header>
+{% endblock %}
+<!--========== END HEADER ==========-->
+
+<!--========== PAGE LAYOUT ==========-->
+{% block content %} {% endblock %}
+<!--========== END PAGE LAYOUT ==========-->
+
+<!--========== FOOTER ==========-->
+<!-- Copyright -->
+<div class="content container">
+    <div class="row">
+        <div class="col-xs-6">
+            <img class="footer-logo" src="{% static 'img/logo.png' %}" alt="Acidus Logo">
+        </div>
+        <div class="col-xs-6 text-right">
+            <p class="margin-b-0"><a class="fweight-700" href="http://keenthemes.com/preview/acidus/">2022 </a>
+                All rights <a class="fweight-700" href="http://www.keenthemes.com/"> reserved</a></p>
+        </div>
+    </div>
+    <!--// end row -->
+</div>
+<!-- End Copyright -->
+</footer>
+<!--========== END FOOTER ==========-->
+
+
+</body>
+</html>

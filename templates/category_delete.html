@@ -1,14 +1,13 @@
 {% extends "base_generic.html" %}
 
-
 {% block content %}
 
     <div class="section-seperator">
         <div class="content-md container">
             <div class="row margin-b-40">
                 <div class="col-sm-6">
-                    <h2>Добавление новой категории</h2>
-                    <p>Введите название категории ниже и нажмите кнопку "Создать"</p>
+                    <h2>Удаление категории</h2>
+                    <p>Выберите категорию ниже и нажмите кнопку "Удалить"</p>
                 </div>
             </div>
             <!--// end row -->
@@ -18,11 +17,12 @@
                     <form action="" method="post">
                         {% csrf_token %}
                         <div class="margin-b-10">
-                            <input type="text" class="form-control" placeholder="Название категории" name="name">
-
+                            <select class="form-control" name="name" value={{ form.name }}
+                                    </select>
+                                {{ form.errors.name }}
                         </div>
                         <button style="margin-top: 40px;" type="submit"
-                                class="btn-theme btn-theme-sm btn-base-bg text-uppercase">Создать
+                                class="btn-theme btn-theme-sm btn-base-bg text-uppercase">Удалить
                         </button>
                         <p>{{ form.errors.name }}</p>
                     </form>

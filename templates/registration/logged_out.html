@@ -1,5 +1,17 @@
-{% block content %}
-<p>Logged out!</p>
+{% extends "base_generic.html" %}
 
-<a href="{% url 'login'%}">Click here to login again.</a>
+{% block title %} <title>Выход</title> {% endblock %}
+
+{% block content %}
+
+    <div class="content-md container">
+        <div class="row margin-b-20">
+            <div class="col-sm-6">
+                <h2>Вы вышли!</h2>
+                <a href="{% url 'login' %}">Нажмите здесь, чтобы снова войти.</a>
+            </div>
+
+        </div>
+    </div>
+
 {% endblock %}

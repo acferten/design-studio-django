@@ -1,12 +1,47 @@
-{% block content %}
-    <h1>Обновление статуса для заявки "{{ order.name }}"</h1>
-    <p>Заказчик: {{ order.orderer }}</p>
+{% extends "base_generic.html" %}
 
-    <form action="" method="post">
-        {% csrf_token %}
+{% block title %} <title>Смена статуса</title> {% endblock %}
+
+{% block content %}
+
+    <div class="section-seperator">
+        <div class="content-md container">
+            <div class="row margin-b-40">
+                <div class="col-sm-6">
+                    <h2>Обновление статуса для заявки "{{ order.name }}"</h2>
+                    <p>Заказчик: {{ order.orderer }}</p>
+                </div>
+            </div>
+            <!--// end row -->
+
+            <div class="row">
+                <div class="col-md-5 col-sm-7">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                       <div class="margin-b-10">
+                            {{ form.as_table }}
+                        </div>
+                        <button style="margin-top: 30px;" type="submit"
+                                class="btn-theme btn-theme-sm btn-base-bg text-uppercase">Обновить
+                        </button>
+                        <p>{{ form.errors.name }}</p>
+                    </form>
+                </div>
+            </div>
+            <!--// end row -->
+        </div>
+    </div>
+
+
+
+<!--//    <h1>Обновление статуса для заявки "{{ order.name }}"</h1>
+{#    <p>Заказчик: {{ order.orderer }}</p>#}
+
+    <form action="" method="post" enctype="multipart/form-data">
+{#       {% csrf_token %}#}
         <table>
-            {{ form.as_table }}
+{#            {{ form.as_table }}#}
         </table>
         <input type="submit" value="Подтвердить">
     </form>
-{% endblock %}
+{% endblock %}-->

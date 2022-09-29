@@ -1,24 +1,75 @@
+{% extends "base_generic.html" %}
+
+{% block title %} <title>Список всех заявок</title> {% endblock %}
+
+
 {% block content %}
-    <h1>Все заявки</h1>
 
+    <div class="section-seperator">
+        <div class="content-md container">
+            <div class="row margin-b-40">
+                <div class="col-sm-6">
+                    <h2>Список вcех заявок</h2>
+                    <p>Выберите значение из выпадающего списка и нажмите кнопку "OK" для применения фильтров.</p>
+                    <a href="{% url 'delete-category' %}">Удалить категорию</a>
+                    <br>
+                    <a href="{% url 'add-category' %}">Добавить категорию</a>
+                </div>
+            </div>
+            <!--// end row -->
 
-    <form method="GET">
-        {{ filter.form }}
-        <button type="submit" class="btn btn-primary">ОК</button>
-    </form>
-    <a href="{% url 'delete-category' %}">Удалить категорию</a>
-    {% if order_list %}
-        <ul>
+            <div class="row">
 
+                <div class="margin-b-10" style="display: inline-block">
+                    <form method="GET">
+                        <select style="display: inline-block" class="form-control" name="category"
+                                value={{ filter.form.category }}
+                                        </select>
+                            <button style="display: inline-block" type="submit" class="btn btn-primary">ОК</button>
+                    </form>
+                </div>
+            </div>
             {% for order in filter.qs %}
-                <li>
-                    <a href="{% url 'order-detail' order.pk %}">{{ order.name }}</a> ({{ order.get_status_display }}) -
-                    {{ order.orderer }}
-                </li>
+                <div class="col-sm-4 sm-margin-b-50" style="margin-top: 60px">
+                    <div class="wow fadeInLeft" data-wow-duration=".3" data-wow-delay=".3s">
+                        <h3>{{ order.name }}</h3>
+                        <p>{{ order.orderer }}</p>
+                        <p>{{ order.category }}</p>
+                        <p>{{ order.date }}</p>
+                        <a class="link" href="{% url 'order-detail' order.pk %}">Смотреть всю заявку</a>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
 
-    {% else %}
-        <p>Заявок пока что нет</p>
-    {% endif %}
+        </div>
+    </div>
 {% endblock %}
+
+
+
+{#{% block content %}#}
+{#    <h1>Все заявки</h1>#}
+{##}
+{##}
+{#    <form method="GET">#}
+{#        {{ filter.form }}#}
+{#        <button type="submit" class="btn btn-primary">ОК</button>#}
+{##}
+{#    </form>#}
+{#    <a href="{% url 'delete-category' %}">Удалить категорию</a>#}
+{#    <a href="{% url 'add-category' %}">Добавить категорию</a>#}
+{#    {% if order_list %}#}
+{#        <ul>#}
+{##}
+{#            {% for order in filter.qs %}#}
+{#                <li>#}
+{#                    <a href="{% url 'order-detail' order.pk %}">{{ order.name }}</a> ({{ order.get_status_display }}) -#}
+{#                    {{ order.orderer }}#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{##}
+{#    {% else %}#}
+{#        <p>Заявок пока что нет</p>#}
+{#    {% endif %}#}
+{#{% endblock %}#}

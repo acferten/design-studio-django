@@ -1,17 +1,73 @@
+{% extends "base_generic.html" %}
+
+{% block title %} <title>Информация о заявке</title> {% endblock %}
+
 {% block content %}
-    <h1>Название заявки: {{ order.name }}</h1>
+    <div class="content-md container">
+        <div class="row margin-b-20">
+            <div class="col-sm-6">
+                <h2>{{ order.name }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 sm-margin-b-50">
+                <div class="margin-b-30">
+                    <p>{{ order.description }}</p>
+                </div>
+                <p><strong>Категория: </strong> {{ order.category }}</p>
+                <p><strong>Дата создания: </strong> {{ order.date }}</p>
+                <p><strong>Статус: </strong> {{ order.get_status_display }}</p>
+                <p><strong>План помещения: </strong></p>
+                <img class="img-responsive" src="{{ order.plan.url }}" alt="Our Office">
 
-    <p><strong>Заказчик:</strong> {{ order.orderer }}</p>
-    <p><strong>Описание:</strong> {{ order.description }}</p>
-    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
-    <img src="{{ order.plan.url }}">
-    <p><strong>Категория:</strong> {{ order.category }}</p>
-    <p><strong>Дата создания::</strong> {{ order.date }}</p>
-{#    <img src="{{ order.design.url }}">#}
-    <br>
-    <a href="{{ order.pk }}/delete">Удалить заявку?</a>
 
-    {% if perms.app.can_change_status %}
-        <a href="{{ order.pk }}/status-change">Обновить статус</a>
-    {% endif %}
+            </div>
+            {% if order.design %}
+                <div class="col-sm-4 col-sm-offset-1">
+                    <p><strong>Готовый дизайн: </strong></p>
+                    <img class="img-responsive" src="{{ order.design.url }}" alt="Our Office">
+                </div>
+            {% endif %}
+            {% if order.comment %}
+                <div class="col-sm-4 col-sm-offset-1">
+                    <p><strong>Комментарий исполнителя:</strong> {{ order.comment }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if order.status == 'н' %}
+            <a class="link" href="{{ order.pk }}/delete">Удалить заявку</a>
+            <br>
+        {% endif %}
+        {% if perms.app.can_change_status %}
+            <a class="link" href="{{ order.pk }}/status-change">Обновить статус</a>
+        {% endif %}
+        <!--// end row -->
+    </div>
+
+
+
+{##}
+{#    <h1>Название заявки: {{ order.name }}</h1>#}
+{##}
+{#    <p><strong>Заказчик:</strong> {{ order.orderer }}</p>#}
+{#    <p><strong>Описание:</strong> {{ order.description }}</p>#}
+{#    <p><strong>План помещения:</strong></p>#}
+{#    <img src="{{ order.plan.url }}">#}
+{#    <p><strong>Категория:</strong> {{ order.category }}</p>#}
+{#    <p><strong>Дата создания::</strong> {{ order.date }}</p>#}
+{#    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>#}
+{#    {% if order.design %}#}
+{#        <p><strong>Готовый дизайн:</strong></p>#}
+{#        <img src="{{ order.design.url }}">#}
+{#    {% endif %}#}
+{#    {% if order.comment %}#}
+{#        <p><strong>Комментарий исполнителя:</strong> {{ order.comment }}</p>#}
+{#    {% endif %}#}
+{#    <br>#}
+{#    <a href="{{ order.pk }}/delete">Удалить заявку?</a>#}
+{##}
+{#    {% if perms.app.can_change_status %}#}
+{#        <a href="{{ order.pk }}/status-change">Обновить статус</a>#}
+{#    {% endif %}#}
 {% endblock %}
